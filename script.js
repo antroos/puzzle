@@ -26,14 +26,10 @@ document.addEventListener('DOMContentLoaded', function() {
 // Функція ініціалізації upload area (викликається після показу gameContent)
 function initUploadArea() {
     const uploadArea = document.querySelector('.upload-area');
-    const uploadBtn = document.querySelector('.upload-btn');
     
-    if (uploadArea && uploadBtn) {
+    if (uploadArea) {
         uploadArea.addEventListener('click', function(e) {
-            // Якщо клікнули не по кнопці, то відкриваємо файловий діалог
-            if (e.target !== uploadBtn) {
-                selectFile();
-            }
+            selectFile();
         });
     }
 }
