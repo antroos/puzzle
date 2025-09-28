@@ -20,19 +20,23 @@ document.addEventListener('DOMContentLoaded', function() {
     // Додаємо обробник форми
     document.getElementById('welcomeForm').addEventListener('submit', handleWelcomeForm);
     
-    // Додаємо клік на upload area (окрім кнопки)
+    // Privacy Policy дата встановлена статично в HTML
+});
+
+// Функція ініціалізації upload area (викликається після показу gameContent)
+function initUploadArea() {
     const uploadArea = document.querySelector('.upload-area');
     const uploadBtn = document.querySelector('.upload-btn');
     
-    uploadArea.addEventListener('click', function(e) {
-        // Якщо клікнули не по кнопці, то відкриваємо файловий діалог
-        if (e.target !== uploadBtn) {
-            selectFile();
-        }
-    });
-    
-    // Privacy Policy дата встановлена статично в HTML
-});
+    if (uploadArea && uploadBtn) {
+        uploadArea.addEventListener('click', function(e) {
+            // Якщо клікнули не по кнопці, то відкриваємо файловий діалог
+            if (e.target !== uploadBtn) {
+                selectFile();
+            }
+        });
+    }
+}
 
 // Обробка форми входу
 function handleWelcomeForm(e) {
@@ -59,6 +63,9 @@ function handleWelcomeForm(e) {
     // Показуємо гру
     document.getElementById('welcomeSection').style.display = 'none';
     document.getElementById('gameContent').style.display = 'block';
+    
+    // Ініціалізуємо upload area після показу gameContent
+    initUploadArea();
 }
 
 // Оновлення заголовку гри з ім'ям дитини
