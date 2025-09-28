@@ -71,23 +71,18 @@ header p {
     transform: scale(1.02);
 }
 
-.upload-area.dragover {
-    border-color: #4CAF50;
-    background: #e8f5e8;
-}
-
 .upload-icon {
     font-size: 4rem;
     margin-bottom: 20px;
 }
 
-.upload-content h2 {
+.upload-area h2 {
     color: #667eea;
     margin-bottom: 10px;
     font-size: 2rem;
 }
 
-.upload-content p {
+.upload-area p {
     color: #666;
     margin-bottom: 20px;
     font-size: 1.1rem;
@@ -110,13 +105,17 @@ header p {
     box-shadow: 0 5px 15px rgba(0,0,0,0.2);
 }
 
-/* Difficulty Selector */
-.difficulty-selector {
-    margin-top: 30px;
+/* Difficulty Section */
+.difficulty-section {
+    background: white;
+    border-radius: 20px;
+    padding: 40px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    margin-bottom: 30px;
     text-align: center;
 }
 
-.difficulty-selector h3 {
+.difficulty-section h3 {
     color: #667eea;
     margin-bottom: 20px;
     font-size: 1.5rem;
@@ -129,7 +128,7 @@ header p {
     flex-wrap: wrap;
 }
 
-.difficulty-btn {
+.difficulty-buttons button {
     background: white;
     border: 2px solid #667eea;
     color: #667eea;
@@ -141,7 +140,7 @@ header p {
     font-size: 1rem;
 }
 
-.difficulty-btn:hover {
+.difficulty-buttons button:hover {
     background: #667eea;
     color: white;
     transform: scale(1.05);
@@ -163,7 +162,7 @@ header p {
     padding: 0 10px;
 }
 
-.back-btn {
+.game-header button {
     background: #ff6b6b;
     color: white;
     border: none;
@@ -175,37 +174,23 @@ header p {
     transition: all 0.3s ease;
 }
 
-.back-btn:hover {
+.game-header button:hover {
     background: #ff5252;
     transform: scale(1.05);
 }
 
-.game-info {
-    display: flex;
-    align-items: center;
-    gap: 20px;
+.game-header button:last-child {
+    background: #4CAF50;
+}
+
+.game-header button:last-child:hover {
+    background: #45a049;
 }
 
 #piecesLeft {
     font-size: 1.2rem;
     color: #667eea;
     font-weight: bold;
-}
-
-.shuffle-btn {
-    background: #4CAF50;
-    color: white;
-    border: none;
-    padding: 10px 15px;
-    border-radius: 15px;
-    cursor: pointer;
-    font-family: inherit;
-    transition: all 0.3s ease;
-}
-
-.shuffle-btn:hover {
-    background: #45a049;
-    transform: scale(1.05);
 }
 
 /* Game Area */
@@ -248,7 +233,7 @@ header p {
 
 /* Puzzle Pieces */
 .puzzle-piece {
-    position: absolute;
+    position: relative;
     cursor: grab;
     transition: all 0.2s ease;
     border-radius: 5px;
@@ -258,12 +243,6 @@ header p {
 .puzzle-piece:hover {
     transform: scale(1.05);
     z-index: 100;
-}
-
-.puzzle-piece.dragging {
-    cursor: grabbing;
-    transform: rotate(5deg) scale(1.1);
-    z-index: 1000;
 }
 
 .puzzle-piece.correct {
@@ -278,15 +257,8 @@ header p {
     100% { transform: scale(1); }
 }
 
-.drop-zone {
-    position: absolute;
-    border: 2px dashed transparent;
-    border-radius: 5px;
-    transition: all 0.3s ease;
-}
-
-.drop-zone.highlight {
-    border-color: #4CAF50;
+.drop-zone:hover {
+    border-color: #4CAF50 !important;
     background: rgba(76, 175, 80, 0.1);
 }
 
@@ -335,7 +307,7 @@ header p {
     color: #666;
 }
 
-.play-again-btn {
+.modal-content button {
     background: linear-gradient(45deg, #667eea, #764ba2);
     color: white;
     border: none;
@@ -347,7 +319,7 @@ header p {
     font-family: inherit;
 }
 
-.play-again-btn:hover {
+.modal-content button:hover {
     transform: translateY(-2px);
     box-shadow: 0 5px 15px rgba(0,0,0,0.2);
 }

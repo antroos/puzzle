@@ -13,38 +13,35 @@
             <p>Завантаж свою фотографію та збери пазл!</p>
         </header>
 
+        <!-- Завантаження фото -->
         <div class="upload-section" id="uploadSection">
-            <div class="upload-area" id="uploadArea">
-                <div class="upload-content">
-                    <div class="upload-icon">📸</div>
-                    <h2>Вибери фотографію</h2>
-                    <p>Перетягни сюди або натисни для вибору</p>
-                    <input type="file" id="imageInput" accept="image/*" hidden>
-                    <button class="upload-btn" onclick="document.getElementById('imageInput').click()">
-                        Обрати фото
-                    </button>
-                </div>
+            <div class="upload-area">
+                <div class="upload-icon">📸</div>
+                <h2>Вибери фотографію</h2>
+                <p>Перетягни сюди або натисни для вибору</p>
+                <button class="upload-btn" onclick="selectFile()">Обрати фото</button>
             </div>
-            
-            <div class="difficulty-selector" id="difficultySelector" style="display: none;">
-                <h3>Оберіть складність:</h3>
-                <div class="difficulty-buttons">
-                    <button class="difficulty-btn" data-pieces="6">Легко (6 шматочків)</button>
-                    <button class="difficulty-btn" data-pieces="12">Середньо (12 шматочків)</button>
-                    <button class="difficulty-btn" data-pieces="20">Складно (20 шматочків)</button>
-                </div>
+            <input type="file" id="fileInput" accept="image/*" style="display: none;" onchange="loadImage(this)">
+        </div>
+
+        <!-- Вибір складності -->
+        <div class="difficulty-section" id="difficultySection" style="display: none;">
+            <h3>Оберіть складність:</h3>
+            <div class="difficulty-buttons">
+                <button onclick="startGame(6)">Легко (6 шматочків)</button>
+                <button onclick="startGame(12)">Середньо (12 шматочків)</button>
+                <button onclick="startGame(20)">Складно (20 шматочків)</button>
             </div>
         </div>
 
+        <!-- Гра -->
         <div class="game-section" id="gameSection" style="display: none;">
             <div class="game-header">
-                <button class="back-btn" id="backBtn">← Назад</button>
-                <div class="game-info">
-                    <span id="piecesLeft">Залишилось: 0</span>
-                    <button class="shuffle-btn" id="shuffleBtn">🔄 Перемішати</button>
-                </div>
+                <button onclick="goBack()">← Назад</button>
+                <span id="piecesLeft">Залишилось: 0</span>
+                <button onclick="shufflePieces()">🔄 Перемішати</button>
             </div>
-
+            
             <div class="game-area">
                 <div class="puzzle-container">
                     <div class="puzzle-board" id="puzzleBoard"></div>
@@ -55,11 +52,12 @@
             </div>
         </div>
 
+        <!-- Модальне вікно перемоги -->
         <div class="success-modal" id="successModal" style="display: none;">
             <div class="modal-content">
                 <h2>🎉 Вітаю! 🎉</h2>
                 <p>Ти зібрав пазл!</p>
-                <button class="play-again-btn" id="playAgainBtn">Грати ще раз</button>
+                <button onclick="goBack()">Грати ще раз</button>
             </div>
         </div>
     </div>
