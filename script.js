@@ -250,12 +250,23 @@ function startGame(pieces) {
 
 // Створення пазлу
 function createPuzzle(cols, rows) {
-    // Створюємо canvas з зображенням
+    // Створюємо canvas з зображенням (без спотворення пропорцій)
     const canvas = document.createElement('canvas');
     const ctx = canvas.getContext('2d');
     canvas.width = boardWidth;
     canvas.height = boardHeight;
-    ctx.drawImage(currentImage, 0, 0, boardWidth, boardHeight);
+    ctx.imageSmoothingEnabled = true;
+    ctx.imageSmoothingQuality = 'high';
+    // Фон (білий) під листбокс
+    ctx.fillStyle = '#ffffff';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    // Масштаб "contain" всередині дошки
+    const scale = Math.min(boardWidth / currentImage.width, boardHeight / currentImage.height);
+    const drawW = currentImage.width * scale;
+    const drawH = currentImage.height * scale;
+    const dx = (boardWidth - drawW) / 2;
+    const dy = (boardHeight - drawH) / 2;
+    ctx.drawImage(currentImage, dx, dy, drawW, drawH);
     
     // Налаштовуємо дошку
     const puzzleBoard = document.getElementById('puzzleBoard');
@@ -291,7 +302,8 @@ function createPuzzle(cols, rows) {
             pieceElement.style.width = pieceSize + 'px';
             pieceElement.style.height = pieceSize + 'px';
             pieceElement.style.backgroundImage = `url(${pieceCanvas.toDataURL()})`;
-            pieceElement.style.backgroundSize = 'cover';
+            // Малюнок вже підрізаний під конкретний шматок, тож масштабуємо 1:1
+            pieceElement.style.backgroundSize = '100% 100%';
             pieceElement.draggable = true;
             
             const piece = {
