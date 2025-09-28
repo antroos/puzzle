@@ -3,61 +3,178 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🧩 Пазли для Дена 🧩</title>
+    <title>🧩 Пазли для дітей 🧩</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="container">
-        <header>
-            <h1>🧩 Пазли для Дена 🧩</h1>
-            <p>Завантаж свою фотографію та збери пазл!</p>
-        </header>
-
-        <!-- Завантаження фото -->
-        <div class="upload-section" id="uploadSection">
-            <div class="upload-area">
-                <div class="upload-icon">📸</div>
-                <h2>Вибери фотографію</h2>
-                <p>Перетягни сюди або натисни для вибору</p>
-                <button class="upload-btn" onclick="selectFile()">Обрати фото</button>
-            </div>
-            <input type="file" id="fileInput" accept="image/*" style="display: none;" onchange="loadImage(this)">
+        <!-- Language Switcher -->
+        <div class="language-switcher">
+            <button onclick="switchLanguage('uk')" class="lang-btn active" id="langUk">🇺🇦 УКР</button>
+            <button onclick="switchLanguage('en')" class="lang-btn" id="langEn">🇺🇸 ENG</button>
         </div>
 
-        <!-- Вибір складності -->
-        <div class="difficulty-section" id="difficultySection" style="display: none;">
-            <h3>Оберіть складність:</h3>
-            <div class="difficulty-buttons">
-                <button onclick="startGame(6)">Легко (6 шматочків)</button>
-                <button onclick="startGame(12)">Середньо (12 шматочків)</button>
-                <button onclick="startGame(20)">Складно (20 шматочків)</button>
-            </div>
-        </div>
+        <!-- Welcome Form -->
+        <div class="welcome-section" id="welcomeSection">
+            <header>
+                <h1 data-uk="🧩 Пазли для дітей 🧩" data-en="🧩 Puzzles for Kids 🧩">🧩 Пазли для дітей 🧩</h1>
+                <p data-uk="Створюйте пазли з власних фотографій!" data-en="Create puzzles from your own photos!">Створюйте пазли з власних фотографій!</p>
+            </header>
 
-        <!-- Гра -->
-        <div class="game-section" id="gameSection" style="display: none;">
-            <div class="game-header">
-                <button onclick="goBack()">← Назад</button>
-                <span id="piecesLeft">Залишилось: 0</span>
-                <button onclick="shufflePieces()">🔄 Перемішати</button>
-            </div>
-            
-            <div class="game-area">
-                <div class="puzzle-container">
-                    <div class="puzzle-board" id="puzzleBoard"></div>
+            <div class="welcome-form">
+                <div class="form-content">
+                    <div class="welcome-icon">👨‍👩‍👧‍👦</div>
+                    <h2 data-uk="Ласкаво просимо!" data-en="Welcome!">Ласкаво просимо!</h2>
+                    <p data-uk="Щоб розпочати, введіть ваші дані:" data-en="To get started, please enter your details:">Щоб розпочати, введіть ваші дані:</p>
+                    
+                    <form id="welcomeForm">
+                        <div class="form-group">
+                            <label data-uk="Ім'я дитини:" data-en="Child's name:">Ім'я дитини:</label>
+                            <input type="text" id="childName" placeholder="Ден" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label data-uk="Email батьків:" data-en="Parent's email:">Email батьків:</label>
+                            <input type="email" id="parentEmail" placeholder="parent@example.com" required>
+                        </div>
+                        
+                        <div class="privacy-section">
+                            <div class="checkbox-group">
+                                <input type="checkbox" id="privacyConsent" required>
+                                <label for="privacyConsent">
+                                    <span data-uk="Я погоджуюсь з " data-en="I agree to the ">Я погоджуюсь з </span>
+                                    <a href="#" onclick="showPrivacyPolicy()" data-uk="Політикою конфіденційності" data-en="Privacy Policy">Політикою конфіденційності</a>
+                                </label>
+                            </div>
+                            
+                            <div class="checkbox-group">
+                                <input type="checkbox" id="marketingConsent">
+                                <label for="marketingConsent">
+                                    <span data-uk="Хочу отримувати інформацію про нові продукти для дітей від Welabeldata Inc" data-en="I want to receive information about new kids products from Welabeldata Inc">Хочу отримувати інформацію про нові продукти для дітей від Welabeldata Inc</span>
+                                </label>
+                            </div>
+                        </div>
+                        
+                        <button type="submit" class="start-btn">
+                            <span data-uk="Розпочати гру!" data-en="Start Playing!">Розпочати гру!</span>
+                        </button>
+                    </form>
                 </div>
-                <div class="pieces-container">
-                    <div class="pieces-area" id="piecesArea"></div>
+            </div>
+        </div>
+
+        <!-- Game Content (hidden initially) -->
+        <div class="game-content" id="gameContent" style="display: none;">
+            <header>
+                <h1 id="gameTitle">🧩 Пазли для Дена 🧩</h1>
+                <p data-uk="Завантаж свою фотографію та збери пазл!" data-en="Upload your photo and solve the puzzle!">Завантаж свою фотографію та збери пазл!</p>
+            </header>
+
+            <!-- Завантаження фото -->
+            <div class="upload-section" id="uploadSection">
+                <div class="upload-area">
+                    <div class="upload-icon">📸</div>
+                    <h2 data-uk="Вибери фотографію" data-en="Choose a photo">Вибери фотографію</h2>
+                    <p data-uk="Перетягни сюди або натисни для вибору" data-en="Drag here or click to select">Перетягни сюди або натисни для вибору</p>
+                    <button class="upload-btn" onclick="selectFile()">
+                        <span data-uk="Обрати фото" data-en="Choose Photo">Обрати фото</span>
+                    </button>
+                </div>
+                <input type="file" id="fileInput" accept="image/*" style="display: none;" onchange="loadImage(this)">
+            </div>
+
+            <!-- Вибір складності -->
+            <div class="difficulty-section" id="difficultySection" style="display: none;">
+                <h3 data-uk="Оберіть складність:" data-en="Choose difficulty:">Оберіть складність:</h3>
+                <div class="difficulty-buttons">
+                    <button onclick="startGame(6)">
+                        <span data-uk="Легко (6 шматочків)" data-en="Easy (6 pieces)">Легко (6 шматочків)</span>
+                    </button>
+                    <button onclick="startGame(12)">
+                        <span data-uk="Середньо (12 шматочків)" data-en="Medium (12 pieces)">Середньо (12 шматочків)</span>
+                    </button>
+                    <button onclick="startGame(20)">
+                        <span data-uk="Складно (20 шматочків)" data-en="Hard (20 pieces)">Складно (20 шматочків)</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Гра -->
+            <div class="game-section" id="gameSection" style="display: none;">
+                <div class="game-header">
+                    <button onclick="goBack()">
+                        <span data-uk="← Назад" data-en="← Back">← Назад</span>
+                    </button>
+                    <span id="piecesLeft" data-uk="Залишилось: 0" data-en="Remaining: 0">Залишилось: 0</span>
+                    <button onclick="shufflePieces()">
+                        <span data-uk="🔄 Перемішати" data-en="🔄 Shuffle">🔄 Перемішати</span>
+                    </button>
+                </div>
+                
+                <div class="game-area">
+                    <div class="puzzle-container">
+                        <div class="puzzle-board" id="puzzleBoard"></div>
+                    </div>
+                    <div class="pieces-container">
+                        <div class="pieces-area" id="piecesArea"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Модальне вікно перемоги -->
+            <div class="success-modal" id="successModal" style="display: none;">
+                <div class="modal-content">
+                    <h2 data-uk="🎉 Вітаю! 🎉" data-en="🎉 Congratulations! 🎉">🎉 Вітаю! 🎉</h2>
+                    <p data-uk="Ти зібрав пазл!" data-en="You solved the puzzle!">Ти зібрав пазл!</p>
+                    <button onclick="goBack()">
+                        <span data-uk="Грати ще раз" data-en="Play Again">Грати ще раз</span>
+                    </button>
                 </div>
             </div>
         </div>
 
-        <!-- Модальне вікно перемоги -->
-        <div class="success-modal" id="successModal" style="display: none;">
+        <!-- Privacy Policy Modal -->
+        <div class="privacy-modal" id="privacyModal" style="display: none;">
             <div class="modal-content">
-                <h2>🎉 Вітаю! 🎉</h2>
-                <p>Ти зібрав пазл!</p>
-                <button onclick="goBack()">Грати ще раз</button>
+                <div class="modal-header">
+                    <h2 data-uk="Політика конфіденційності" data-en="Privacy Policy">Політика конфіденційності</h2>
+                    <button onclick="closePrivacyPolicy()" class="close-btn">×</button>
+                </div>
+                <div class="modal-body">
+                    <div class="privacy-content">
+                        <h3>Welabeldata Inc</h3>
+                        
+                        <h4 data-uk="Збір інформації" data-en="Information Collection" class="info-collection">Збір інформації</h4>
+                        <p data-uk="Ми збираємо наступну інформацію:" data-en="We collect the following information:">Ми збираємо наступну інформацію:</p>
+                        <ul>
+                            <li data-uk="Ім'я дитини (для персоналізації досвіду)" data-en="Child's name (for personalization)">Ім'я дитини (для персоналізації досвіду)</li>
+                            <li data-uk="Email батьків (для зв'язку)" data-en="Parent's email (for communication)">Email батьків (для зв'язку)</li>
+                        </ul>
+                        
+                        <h4 data-uk="Використання інформації" data-en="Use of Information" class="info-usage">Використання інформації</h4>
+                        <p data-uk="Зібрана інформація використовується для:" data-en="Collected information is used for:">Зібрана інформація використовується для:</p>
+                        <ul>
+                            <li data-uk="Персоналізації ігрового досвіду" data-en="Personalizing the gaming experience">Персоналізації ігрового досвіду</li>
+                            <li data-uk="Інформування про нові освітні продукти для дітей (за згодою)" data-en="Informing about new educational products for children (with consent)">Інформування про нові освітні продукти для дітей (за згодою)</li>
+                            <li data-uk="Покращення наших сервісів" data-en="Improving our services">Покращення наших сервісів</li>
+                        </ul>
+                        
+                        <h4 data-uk="Захист даних" data-en="Data Protection" class="data-protection">Захист даних</h4>
+                        <p data-uk="Ми не передаємо ваші дані третім особам. Всі дані зберігаються в безпеці та використовуються виключно для зазначених цілей." data-en="We do not share your data with third parties. All data is stored securely and used only for stated purposes.">Ми не передаємо ваші дані третім особам. Всі дані зберігаються в безпеці та використовуються виключно для зазначених цілей.</p>
+                        
+                        <h4 data-uk="Контакти" data-en="Contact" class="contact">Контакти</h4>
+                        <p><strong>Email:</strong> ivan@welabeldata.com</p>
+                        
+                        <div class="last-updated">
+                            <p><strong data-uk="Дата останнього оновлення:" data-en="Last updated:">Дата останнього оновлення:</strong> 28.09.2025</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button onclick="closePrivacyPolicy()" class="close-policy-btn">
+                        <span data-uk="Закрити" data-en="Close">Закрити</span>
+                    </button>
+                </div>
             </div>
         </div>
     </div>

@@ -17,6 +17,40 @@ body {
     padding: 20px;
 }
 
+/* Language Switcher */
+.language-switcher {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 1000;
+    display: flex;
+    gap: 5px;
+}
+
+.lang-btn {
+    background: rgba(255, 255, 255, 0.9);
+    border: 2px solid #667eea;
+    color: #667eea;
+    padding: 8px 12px;
+    border-radius: 15px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-family: inherit;
+    font-size: 0.9rem;
+    font-weight: bold;
+}
+
+.lang-btn:hover {
+    background: #667eea;
+    color: white;
+}
+
+.lang-btn.active {
+    background: #667eea;
+    color: white;
+    box-shadow: 0 2px 10px rgba(102, 126, 234, 0.3);
+}
+
 header {
     text-align: center;
     margin-bottom: 30px;
@@ -103,6 +137,292 @@ header p {
 .upload-btn:hover {
     transform: translateY(-2px);
     box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+}
+
+/* Welcome Form */
+.welcome-section {
+    margin-bottom: 30px;
+}
+
+.welcome-form {
+    background: white;
+    border-radius: 20px;
+    padding: 40px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+.form-content {
+    text-align: center;
+}
+
+.welcome-icon {
+    font-size: 4rem;
+    margin-bottom: 20px;
+}
+
+.welcome-form h2 {
+    color: #667eea;
+    margin-bottom: 10px;
+    font-size: 2rem;
+}
+
+.welcome-form p {
+    color: #666;
+    margin-bottom: 30px;
+    font-size: 1.1rem;
+}
+
+.form-group {
+    margin-bottom: 20px;
+    text-align: left;
+}
+
+.form-group label {
+    display: block;
+    color: #667eea;
+    font-weight: bold;
+    margin-bottom: 8px;
+    font-size: 1rem;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 12px 15px;
+    border: 2px solid #e0e6ff;
+    border-radius: 10px;
+    font-size: 1rem;
+    font-family: inherit;
+    transition: all 0.3s ease;
+}
+
+.form-group input:focus {
+    outline: none;
+    border-color: #667eea;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.privacy-section {
+    margin: 25px 0;
+    text-align: left;
+}
+
+.checkbox-group {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+.checkbox-group input[type="checkbox"] {
+    width: auto;
+    margin-top: 2px;
+    transform: scale(1.2);
+}
+
+.checkbox-group label {
+    margin: 0;
+    font-size: 0.95rem;
+    line-height: 1.4;
+    color: #666;
+    font-weight: normal;
+}
+
+.checkbox-group a {
+    color: #667eea;
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.checkbox-group a:hover {
+    color: #764ba2;
+}
+
+.start-btn {
+    background: linear-gradient(45deg, #4CAF50, #45a049);
+    color: white;
+    border: none;
+    padding: 15px 40px;
+    border-radius: 25px;
+    font-size: 1.2rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-family: inherit;
+    font-weight: bold;
+    margin-top: 10px;
+}
+
+.start-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(76, 175, 80, 0.3);
+}
+
+/* Privacy Policy Modal */
+.privacy-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 10000;
+}
+
+.privacy-modal .modal-content {
+    background: white;
+    border-radius: 20px;
+    max-width: 600px;
+    max-height: 80vh;
+    width: 90%;
+    overflow: hidden;
+    animation: modalAppear 0.3s ease;
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 30px;
+    border-bottom: 1px solid #eee;
+    background: #f8f9ff;
+}
+
+.modal-header h2 {
+    color: #667eea;
+    margin: 0;
+    font-size: 1.5rem;
+}
+
+.close-btn {
+    background: none;
+    border: none;
+    font-size: 2rem;
+    color: #999;
+    cursor: pointer;
+    padding: 0;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: all 0.3s ease;
+}
+
+.close-btn:hover {
+    background: #ff6b6b;
+    color: white;
+}
+
+.modal-body {
+    padding: 30px;
+    max-height: 60vh;
+    overflow-y: auto;
+}
+
+.privacy-content h3 {
+    color: #667eea;
+    text-align: left;
+    margin-bottom: 25px;
+    font-size: 1.4rem;
+    font-weight: bold;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #e0e6ff;
+}
+
+.privacy-content h4 {
+    color: #667eea;
+    margin: 20px 0 12px 0;
+    font-size: 1.1rem;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.privacy-content h4::before {
+    content: "📋";
+    font-size: 1rem;
+}
+
+.privacy-content h4.info-collection::before {
+    content: "📝";
+}
+
+.privacy-content h4.info-usage::before {
+    content: "🎯";
+}
+
+.privacy-content h4.data-protection::before {
+    content: "🔒";
+}
+
+.privacy-content h4.contact::before {
+    content: "📧";
+}
+
+.privacy-content p {
+    color: #666;
+    line-height: 1.5;
+    margin-bottom: 12px;
+    text-align: left;
+}
+
+.privacy-content ul {
+    color: #666;
+    line-height: 1.5;
+    margin-bottom: 12px;
+    padding-left: 25px;
+    text-align: left;
+}
+
+.privacy-content li {
+    margin-bottom: 6px;
+    text-align: left;
+}
+
+.privacy-content strong {
+    color: #667eea;
+}
+
+.last-updated {
+    margin-top: 25px;
+    padding-top: 15px;
+    border-top: 1px solid #eee;
+    text-align: left;
+}
+
+.last-updated p {
+    color: #888;
+    font-size: 0.9rem;
+    margin: 0;
+}
+
+.modal-footer {
+    padding: 20px 30px;
+    border-top: 1px solid #eee;
+    text-align: center;
+    background: #f8f9ff;
+}
+
+.close-policy-btn {
+    background: #667eea;
+    color: white;
+    border: none;
+    padding: 10px 30px;
+    border-radius: 15px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-family: inherit;
+}
+
+.close-policy-btn:hover {
+    background: #764ba2;
+    transform: scale(1.05);
 }
 
 /* Difficulty Section */

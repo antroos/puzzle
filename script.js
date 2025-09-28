@@ -6,14 +6,21 @@ let totalPieces = 0;
 let pieceSize = 100;
 let boardWidth = 0;
 let boardHeight = 0;
+let currentLanguage = 'uk';
+let childName = '';
+let parentEmail = '';
 
 // Функція вибору файлу
 function selectFile() {
     document.getElementById('fileInput').click();
 }
 
-// Додаємо клік на upload area (окрім кнопки)
+// Ініціалізація при завантаженні сторінки
 document.addEventListener('DOMContentLoaded', function() {
+    // Додаємо обробник форми
+    document.getElementById('welcomeForm').addEventListener('submit', handleWelcomeForm);
+    
+    // Додаємо клік на upload area (окрім кнопки)
     const uploadArea = document.querySelector('.upload-area');
     const uploadBtn = document.querySelector('.upload-btn');
     
@@ -23,7 +30,80 @@ document.addEventListener('DOMContentLoaded', function() {
             selectFile();
         }
     });
+    
+    // Privacy Policy дата встановлена статично в HTML
 });
+
+// Обробка форми входу
+function handleWelcomeForm(e) {
+    e.preventDefault();
+    
+    childName = document.getElementById('childName').value.trim();
+    parentEmail = document.getElementById('parentEmail').value.trim();
+    const privacyConsent = document.getElementById('privacyConsent').checked;
+    const marketingConsent = document.getElementById('marketingConsent').checked;
+    
+    if (!childName || !parentEmail || !privacyConsent) {
+        alert(currentLanguage === 'uk' ? 
+            'Будь ласка, заповніть всі поля та погодьтеся з політикою конфіденційності!' :
+            'Please fill all fields and agree to the privacy policy!');
+        return;
+    }
+    
+    // Зберігаємо дані (в реальному проекті відправили б на сервер)
+    console.log('User data:', { childName, parentEmail, marketingConsent });
+    
+    // Персоналізуємо заголовок
+    updateGameTitle();
+    
+    // Показуємо гру
+    document.getElementById('welcomeSection').style.display = 'none';
+    document.getElementById('gameContent').style.display = 'block';
+}
+
+// Оновлення заголовку гри з ім'ям дитини
+function updateGameTitle() {
+    const gameTitle = document.getElementById('gameTitle');
+    if (currentLanguage === 'uk') {
+        gameTitle.textContent = `🧩 Пазли для ${childName} 🧩`;
+    } else {
+        gameTitle.textContent = `🧩 Puzzles for ${childName} 🧩`;
+    }
+}
+
+// Перемикання мови
+function switchLanguage(lang) {
+    currentLanguage = lang;
+    
+    // Оновлюємо активну кнопку
+    document.querySelectorAll('.lang-btn').forEach(btn => btn.classList.remove('active'));
+    document.getElementById('lang' + lang.charAt(0).toUpperCase() + lang.slice(1)).classList.add('active');
+    
+    // Оновлюємо всі тексти
+    document.querySelectorAll('[data-' + lang + ']').forEach(element => {
+        element.textContent = element.getAttribute('data-' + lang);
+    });
+    
+    // Оновлюємо заголовок гри якщо ім'я вже введено
+    if (childName) {
+        updateGameTitle();
+    }
+    
+    // Оновлюємо лічильник шматочків
+    if (totalPieces > 0) {
+        updatePiecesCounter();
+    }
+}
+
+// Показ політики конфіденційності
+function showPrivacyPolicy() {
+    document.getElementById('privacyModal').style.display = 'flex';
+}
+
+// Закриття політики конфіденційності
+function closePrivacyPolicy() {
+    document.getElementById('privacyModal').style.display = 'none';
+}
 
 // Функція завантаження зображення
 function loadImage(input) {
@@ -267,7 +347,8 @@ function shufflePieces() {
 // Оновити лічильник
 function updatePiecesCounter() {
     const piecesLeft = totalPieces - correctPieces;
-    document.getElementById('piecesLeft').textContent = `Залишилось: ${piecesLeft}`;
+    const text = currentLanguage === 'uk' ? `Залишилось: ${piecesLeft}` : `Remaining: ${piecesLeft}`;
+    document.getElementById('piecesLeft').textContent = text;
 }
 
 // Показати ігрову секцію
