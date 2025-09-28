@@ -1,0 +1,23 @@
+{
+  "name": "puzzle-for-den",
+  "version": "1.0.0",
+  "description": "Веб-гра для створення та складання пазлів з власних фотографій!",
+  "main": "script.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/antroos/puzzle.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/antroos/puzzle/issues"
+  },
+  "homepage": "https://github.com/antroos/puzzle#readme",
+  "dependencies": {
+    "@neondatabase/serverless": "^1.0.1"
+  }
+}

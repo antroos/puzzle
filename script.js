@@ -103,8 +103,17 @@ function handleWelcomeForm(e) {
         return;
     }
     
-    // Зберігаємо дані (в реальному проекті відправили б на сервер)
-    console.log('User data:', { childName, parentEmail, marketingConsent });
+    // Відправляємо дані на сервер
+    fetch('/api/collect', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            childName,
+            parentEmail,
+            privacyConsent,
+            marketingConsent
+        })
+    }).catch(console.error);
     
     // Персоналізуємо заголовок
     updateGameTitle();
