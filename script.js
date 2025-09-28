@@ -9,10 +9,18 @@ let boardHeight = 0;
 let currentLanguage = 'uk';
 let childName = '';
 let parentEmail = '';
+let uploadListenersInitialized = false;
 
 // Функція вибору файлу
 function selectFile() {
-    document.getElementById('fileInput').click();
+    console.log('selectFile викликано');
+    const fileInput = document.getElementById('fileInput');
+    if (fileInput) {
+        fileInput.click();
+        console.log('fileInput.click() викликано');
+    } else {
+        console.error('fileInput не знайдено');
+    }
 }
 
 // Ініціалізація при завантаженні сторінки
@@ -21,17 +29,62 @@ document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('welcomeForm').addEventListener('submit', handleWelcomeForm);
     
     // Privacy Policy дата встановлена статично в HTML
+    // Ініціалізуємо upload listeners одразу, щоб працювало навіть до сабміту форми
+    initUploadArea();
 });
 
 // Функція ініціалізації upload area (викликається після показу gameContent)
 function initUploadArea() {
+    if (uploadListenersInitialized) return;
     const uploadArea = document.querySelector('.upload-area');
+    const fileInput = document.getElementById('fileInput');
+    const uploadBtn = document.querySelector('.upload-btn');
     
     if (uploadArea) {
         uploadArea.addEventListener('click', function(e) {
             selectFile();
         });
     }
+    if (uploadBtn) {
+        uploadBtn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            selectFile();
+        });
+    }
+    
+    if (fileInput) {
+        console.log('Додаємо обробник change для fileInput');
+        fileInput.addEventListener('change', function(e) {
+            console.log('fileInput change event:', e.target.files);
+            if (e.target.files && e.target.files[0]) {
+                const file = e.target.files[0];
+                console.log('Обрано файл:', file.name, file.type);
+                
+                // Перевіряємо чи це зображення
+                if (!file.type.startsWith('image/')) {
+                    alert('Будь ласка, оберіть файл зображення!');
+                    return;
+                }
+                
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    console.log('FileReader завантажив файл');
+                    const img = new Image();
+                    img.onload = function() {
+                        console.log('Зображення завантажено:', img.width, 'x', img.height);
+                        currentImage = img;
+                        document.getElementById('uploadSection').style.display = 'none';
+                        document.getElementById('difficultySection').style.display = 'block';
+                    };
+                    img.src = event.target.result;
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+    } else {
+        console.error('fileInput не знайдено в initUploadArea');
+    }
+    uploadListenersInitialized = true;
 }
 
 // Обробка форми входу
@@ -135,6 +188,8 @@ function showDifficultySelector() {
 function startGame(pieces) {
     totalPieces = pieces;
     correctPieces = 0;
+    // Показуємо ігрову секцію ПЕРЕД вимірюванням розмірів
+    showGameSection();
     
     // Визначаємо сітку
     let cols, rows;
@@ -142,25 +197,46 @@ function startGame(pieces) {
     else if (pieces === 12) { cols = 4; rows = 3; }
     else { cols = 5; rows = 4; }
     
-    // Розраховуємо розміри
-    const maxWidth = 400;
-    const maxHeight = 300;
-    const aspectRatio = currentImage.width / currentImage.height;
+    // Отримуємо реальні розміри контейнера (після відображення)
+    const puzzleContainer = document.querySelector('.puzzle-container');
+    const containerRect = puzzleContainer.getBoundingClientRect();
+    const gameAreaRect = document.querySelector('.game-area').getBoundingClientRect();
+    const maxWidth = Math.max(0, containerRect.width - 40); // мінус padding
+    const maxHeight = Math.max(0, gameAreaRect.height - 40); // висота всієї області гри мінус відступи
     
-    if (aspectRatio > maxWidth / maxHeight) {
-        boardWidth = maxWidth;
-        boardHeight = maxWidth / aspectRatio;
+    // Розраховуємо розміри на основі пропорцій фото та сітки
+    const imageAspectRatio = currentImage.width / currentImage.height;
+    const gridAspectRatio = cols / rows;
+    
+    // Визначаємо, що обмежує: ширина чи висота
+    let finalWidth, finalHeight;
+    
+    if (imageAspectRatio > maxWidth / maxHeight) {
+        // Обмежує ширина
+        finalWidth = maxWidth;
+        finalHeight = maxWidth / imageAspectRatio;
     } else {
-        boardHeight = maxHeight;
-        boardWidth = maxHeight * aspectRatio;
+        // Обмежує висота
+        finalHeight = maxHeight;
+        finalWidth = maxHeight * imageAspectRatio;
     }
     
-    pieceSize = Math.min(boardWidth / cols, boardHeight / rows);
+    // Розраховуємо розмір одного шматочка
+    pieceSize = Math.min(finalWidth / cols, finalHeight / rows);
+    
+    // Фінальні розміри дошки (точно по сітці)
     boardWidth = pieceSize * cols;
     boardHeight = pieceSize * rows;
     
+    console.log('Розрахунок розмірів:', {
+        containerSize: { width: maxWidth, height: maxHeight },
+        imageAspectRatio,
+        gridSize: { cols, rows },
+        pieceSize,
+        boardSize: { width: boardWidth, height: boardHeight }
+    });
+    
     createPuzzle(cols, rows);
-    showGameSection();
 }
 
 // Створення пазлу
@@ -220,7 +296,7 @@ function createPuzzle(cols, rows) {
             pieces.push(piece);
             piecesArea.appendChild(pieceElement);
             
-            // Створюємо зону для скидання
+            // Створюємо зону для скидання з точними розмірами
             const dropZone = document.createElement('div');
             dropZone.className = 'drop-zone';
             dropZone.style.position = 'absolute';
