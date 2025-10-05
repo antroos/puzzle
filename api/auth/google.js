@@ -1,5 +1,9 @@
 import { OAuth2Client } from 'google-auth-library';
 import { serialize } from 'cookie';
+import { neon, neonConfig } from '@neondatabase/serverless';
+
+neonConfig.fetchConnectionCache = true;
+const sql = neon(process.env.CUSTOMERS_URL || process.env.DATABASE_URL);
 
 const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
@@ -14,6 +18,26 @@ export default async function handler(req, res) {
       audience: process.env.GOOGLE_CLIENT_ID
     });
     const payload = ticket.getPayload();
+
+  // upsert користувача у новій БД
+  try {
+    await sql`
+      CREATE TABLE IF NOT EXISTS users (
+        id serial PRIMARY KEY,
+        google_sub text UNIQUE NOT NULL,
+        email text NOT NULL,
+        name text,
+        created_at timestamptz DEFAULT now()
+      )`;
+
+    await sql`
+      INSERT INTO users (google_sub, email, name)
+      VALUES (${payload.sub}, ${payload.email}, ${payload.name})
+      ON CONFLICT (google_sub) DO UPDATE
+      SET email = EXCLUDED.email, name = EXCLUDED.name`;
+  } catch (e) {
+    console.error('users upsert failed', e);
+  }
 
     const session = JSON.stringify({
       sub: payload.sub,
