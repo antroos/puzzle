@@ -31,7 +31,48 @@ document.addEventListener('DOMContentLoaded', function() {
     // Privacy Policy дата встановлена статично в HTML
     // Ініціалізуємо upload listeners одразу, щоб працювало навіть до сабміту форми
     initUploadArea();
+
+    // Ініціалізація Google Sign-In кнопки (GIS)
+    const gid = window.google && window.google.accounts && window.google.accounts.id;
+    const clientId = (typeof process !== 'undefined' && process.env && process.env.GOOGLE_CLIENT_ID) ? process.env.GOOGLE_CLIENT_ID : undefined;
+    if (gid) {
+        gid.initialize({
+            client_id: clientId || 'GOOGLE_CLIENT_ID_PLACEHOLDER',
+            callback: handleGoogleCredential
+        });
+        const googleButton = document.getElementById('googleButton');
+        if (googleButton) {
+            gid.renderButton(googleButton, { theme: 'outline', size: 'large', type: 'standard' });
+        }
+    }
 });
+
+// Обробник токена від Google Identity Services
+async function handleGoogleCredential(response) {
+    try {
+        const res = await fetch('/api/auth/google', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ credential: response.credential })
+        });
+        const data = await res.json();
+        if (data.ok) {
+            // Автозаповнення імені, якщо є
+            if (data.user && data.user.name) {
+                childName = data.user.name.split(' ')[0];
+                updateGameTitle();
+            }
+            document.getElementById('welcomeSection').style.display = 'none';
+            document.getElementById('gameContent').style.display = 'block';
+            initUploadArea();
+        } else {
+            alert('Google sign-in failed');
+        }
+    } catch (e) {
+        console.error(e);
+        alert('Network error');
+    }
+}
 
 // Функція ініціалізації upload area (викликається після показу gameContent)
 function initUploadArea() {
