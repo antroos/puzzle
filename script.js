@@ -32,19 +32,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Ініціалізуємо upload listeners одразу, щоб працювало навіть до сабміту форми
     initUploadArea();
 
-    // Ініціалізація Google Sign-In кнопки (GIS)
-    const gid = window.google && window.google.accounts && window.google.accounts.id;
-    const clientId = (typeof process !== 'undefined' && process.env && process.env.GOOGLE_CLIENT_ID) ? process.env.GOOGLE_CLIENT_ID : undefined;
-    if (gid) {
-        gid.initialize({
-            client_id: clientId || 'GOOGLE_CLIENT_ID_PLACEHOLDER',
-            callback: handleGoogleCredential
-        });
-        const googleButton = document.getElementById('googleButton');
-        if (googleButton) {
-            gid.renderButton(googleButton, { theme: 'outline', size: 'large', type: 'standard' });
-        }
-    }
+    // Кнопка Google ініціалізується декларативно через g_id_onload у index.html
 });
 
 // Обробник токена від Google Identity Services
@@ -55,7 +43,13 @@ async function handleGoogleCredential(response) {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ credential: response.credential })
         });
-        const data = await res.json();
+        let data;
+        try {
+            data = await res.json();
+        } catch (e) {
+            // Якщо сервер повернув HTML/текст при 500
+            throw new Error('Server error ' + res.status);
+        }
         if (data.ok) {
             // Автозаповнення імені, якщо є
             if (data.user && data.user.name) {
